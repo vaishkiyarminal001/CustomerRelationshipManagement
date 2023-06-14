@@ -1,0 +1,14 @@
+package com.masai.dao;
+
+import com.masai.entity.*;
+
+public interface CustomerDao {
+	
+	Customer getById(int id);
+	Customer getByUsername(String username);
+	void save(Customer customer);
+	void update(Customer customer);
+	void delete(Customer customer);
+	
+
+}

@@ -1,0 +1,56 @@
+package com.masai.dao;
+
+import com.masai.entity.*;
+import com.masai.utility.*;
+import org.hibernate.*;
+
+public class CustomerDaoImpl implements CustomerDao{
+	
+	@Override
+	public Customer getById(int id) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Customer customer = session.get(Customer.class,id);
+		session.close();
+		return customer;
+	}
+	
+	@Override
+	public Customer getByUsername(String username) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Customer customer = (Customer) session.createQuery("FROM Customer WHERE username = :username")
+				.setParameter("username", username)
+				.uniqueResult();
+		session.close();
+		return customer;
+		
+		
+	}
+	
+	@Override
+	public void save(Customer customer) {
+		Session session = HibernateUtil..getSessionFactory().openSession();
+		Transaction transaction = session.beginTransaction();
+		session.save(customer);
+		transaction.commit();
+		session.close();
+	}
+	
+	 @Override
+	    public void update(Customer customer) {
+	        Session session = HibernateUtil.getSessionFactory().openSession();
+	        Transaction transaction = session.beginTransaction();
+	        session.update(customer);
+	        transaction.commit();
+	        session.close();
+	    }
+
+
+	 @Override
+	    public void delete(Customer customer) {
+	        Session session = HibernateUtil.getSessionFactory().openSession();
+	        Transaction transaction = session.beginTransaction();
+	        session.delete(customer);
+	        transaction.commit();
+	        session.close();
+	    }
+}
