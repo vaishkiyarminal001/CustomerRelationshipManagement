@@ -1,0 +1,177 @@
+package com.masai.dao;
+
+import com.masai.entity.CSR;
+import java.sql.*;
+
+import org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionCreator;
+
+public class CSRDaoImpl implements CSRDao{
+	
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/CRM";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "root1234";
+	
+	@Override
+	public void saveCSR(CSR csr) {
+		
+		Connection connection = getConnection();
+		
+		try {
+			String sql = "INSERT INTO CRM (id, name, email) VALUES(?, ?, ?)";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			
+			statement.setString(1,  csr.getId());
+			statement.setString(2,  csr.getName());
+			statement.setString(3,  csr.getEmail());
+			
+			int rowInserted = statement.executeUpdate();
+			
+			if(rowInserted > 0) {
+				System.out.println("Bravo!!!! CSR saved Successfully!");
+			}
+			
+		}catch(SQLException e) {
+			System.out.println("Oh No****__Error saving CSR: " + e.getMessage());
+		}finally {
+			closeConnection(connection);
+		}
+		
+	}
+	
+	
+	
+	
+	@Override
+	public void updateCSR(CSR csr) {
+		
+		Connection connection = getConnection();
+		
+		try {
+			String sql = "UPDATE CRM SET name = ?, email = ?, WHERE id = ?";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			
+			statement.setString(1,  csr.getId());
+			statement.setString(2,  csr.getName());
+			statement.setString(3,  csr.getEmail());
+			
+			int rowUpdated = statement.executeUpdate();
+			
+			if(rowUpdated > 0) {
+				System.out.println("Bravo!!!! CSR updated Successfully!");
+			} else {
+				System.out.println("No CSR found with the provided ID: " + csr.getId());
+			}
+			
+		}catch(SQLException e) {
+			System.out.println("Oh No****__Error updating CSR: " + e.getMessage());
+		}finally {
+			closeConnection(connection);
+		}
+		
+		
+		
+	}
+	
+	@Override
+	public void deleteCSR(String csrId) {
+		
+		
+        Connection connection = getConnection();
+		
+		try {
+			String sql = "DELETE FROM CRM ?, WHERE id = ?";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			
+			statement.setString(1, csrId);
+		
+			
+			int rowDeleted = statement.executeUpdate();
+			
+			if(rowDeleted > 0) {
+				System.out.println("CSR Deleted Successfully!");
+			} else {
+				System.out.println("No CSR found with the provided ID: " + csrId);
+			}
+			
+		}catch(SQLException e) {
+			System.out.println("Error deleting CSR: " + e.getMessage());
+		}finally {
+			closeConnection(connection);
+		}
+		
+		
+	}
+	
+	@Override
+	public CSR getCSRById(String csrId) {
+		
+		 Connection connection = getConnection();
+			
+			try {
+				String sql = "DELETE FROM CRM ?, WHERE id = ?";
+				PreparedStatement statement = connection.prepareStatement(sql);
+				
+				statement.setString(1, csrId);
+			
+				
+				ResultSet resultSet = statement.executeQuery();
+				
+				if(resultSet.next()) {
+					
+					CSR csr = new CSR();
+					csr.setId(resultSet.getString("id"));
+					csr.setName(resultSet.getString("name"));
+					csr.setemail(resultSet.getString("email"));
+					
+					return csr;
+					
+				} else {
+					System.out.println("No CSR found with the provided ID: " + csrId);
+				}
+				
+			}catch(SQLException e) {
+				System.out.println("Error retriving CSR: " + e.getMessage());
+			}finally {
+				closeConnection(connection);
+			}
+			
+			
+		
+		return null;
+		
+	}
+	
+	
+    private Connection getConnection() {
+		
+		Connection connection = null;
+		
+		try {
+			Class.forName("CRM");
+			
+			connection = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+		
+		}catch(ClassNotFoundException e) {
+			System.out.println("Failed to load JDBC driver: " + e.getMessage());
+			
+		}catch (SQLException e) {
+			
+			System.out.println("Failed to establisg database connection: " + e.getMessage());
+			
+		}
+		
+		return connection;
+	}
+	
+	private void closeConnection(Connection connection) {
+		if(connection != null) {
+			try {
+				connection.close();
+			}catch(SQLException e) {
+				System.out.println("Failed to close database connection: " + e.getMessage());
+			}
+		}
+		
+	}
+
+}

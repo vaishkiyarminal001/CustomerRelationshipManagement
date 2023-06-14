@@ -1,0 +1,72 @@
+package com.masai.services;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
+import com.masai.enm.IssueStatus;
+import com.masai.entity.*;
+
+public class CustomerServicesImpl implements CustomerService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    @Transactional
+    public void raiseIssue(String description) {
+    	Issue issue = new Issue();
+        issue.setDescription(description);
+        issue.setStatus(IssueStatus.OPEN);
+        entityManager.persist(issue);
+    }
+
+//    @Override
+//    public void viewIssueStatus(String issueId) {
+//    	 Issue issue = entityManager.find(Issue.class, issueId);
+//         if (issue != null) {
+//             System.out.println("Issue ID: " + issue.getId());
+//             System.out.println("Issue Status: " + issue.getStatus());
+//         } else {
+//             System.out.println("Issue not found with ID: " + issueId);
+//         }
+//    }
+
+    @Override
+    @Transactional
+    public void provideFeedback(String issueId, String feedback) {
+    	 
+    	Issue issue = entityManager.find(Issue.class, Integer.parseInt(issueId));
+         if (issue != null) {
+             issue.setFeedback(feedback);
+             entityManager.merge(issue);
+             System.out.println("Feedback provided for issue ID: " + issue.getId());
+         } else {
+             System.out.println("Issue not found with ID: " + issueId);
+         }
+    }
+
+    @Override
+    @Transactional
+    public void raiseIssueState(String issueId) {
+    	Issue issue = entityManager.find(Issue.class, Integer.parseInt(issueId));
+        if (issue != null) {
+            IssueStatus currentState = issue.getStatus();
+            if (currentState == IssueStatus.OPEN) {
+                issue.setStatus(IssueStatus.IN_PROGRESS);
+            } else if (currentState == IssueStatus.IN_PROGRESS) {
+                issue.setStatus(IssueStatus.RESOLVED);
+            } else {
+                System.out.println("Cannot raise the state of the issue further.");
+                return;
+            }
+
+            entityManager.merge(issue);
+            System.out.println("Issue state raised successfully.");
+        } else {
+            System.out.println("Issue not found with ID: " + issueId);
+        }
+    }
+    
+    
+}

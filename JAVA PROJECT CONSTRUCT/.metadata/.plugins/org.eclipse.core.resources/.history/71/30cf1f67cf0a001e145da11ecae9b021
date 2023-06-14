@@ -1,0 +1,20 @@
+package com.masai.services;
+
+public class CustomerServicesImpl implements CustomerService{
+	
+	@Override
+	public void raiseIssue(String description) {
+		
+	}
+	
+	@Override
+	public void viewIssueStatus(String issueId) {
+		
+	}
+	
+	@Override
+	public void provideFeedback(String issueId, String feedback) {
+		
+	}
+
+}

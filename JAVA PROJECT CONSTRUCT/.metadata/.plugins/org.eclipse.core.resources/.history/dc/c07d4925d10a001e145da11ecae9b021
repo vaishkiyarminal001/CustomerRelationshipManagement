@@ -1,0 +1,72 @@
+package com.masai.services;
+
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+import com.masai.enm.IssueStatus;
+import com.masai.entity.*;
+
+public class CustomerServicesImpl implements CustomerService{
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@Override
+	public void raiseIssue(String description) {
+		
+		Issue issue = new Issue();
+        issue.setDescription(description);
+        
+        entityManager.persist(issue);
+		
+	}
+	
+	@Override
+	public void viewIssueStatus(String issueId) {
+		
+		Issue issue = entityManager.find(Issue.class, issueId);
+        if (issue != null) {
+            System.out.println("Issue ID: " + issue.getId());
+            System.out.println("Issue Status: " + issue.getStatus());
+        } else {
+            System.out.println("Issue not found with ID: " + issueId);
+        }
+		
+	}
+	
+	@Override
+	public void raiseIssueState(String issueId) {
+	    Issue issue = entityManager.find(Issue.class, issueId);
+	    if (issue != null) {
+	        
+	        IssueStatus currentState = issue.getStatus();
+	        if (currentState.equals("Open")) {
+	            issue.setStatus("In Progress");
+	        } else if (currentState.equals("In Progress")) {
+	            issue.setStatus("Resolved");
+	        } else {
+	            System.out.println("Cannot raise the state of the issue further.");
+	            return;
+	        }
+	        
+	        entityManager.merge(issue);
+	        System.out.println("Issue state raised successfully.");
+	    } else {
+	        System.out.println("Issue not found with ID: " + issueId);
+	    }
+	}
+	
+	@Override
+	@Transactional
+	public void provideFeedback(String issueId, String feedback) {
+		
+		Issue issue = entityManager.find(Issue.class, issueId);
+        if (issue != null) {
+            issue.setFeedback(feedback);
+        } else {
+            System.out.println("Issue not found with ID: " + issueId);
+        }
+    
+		
+	}
+
+}

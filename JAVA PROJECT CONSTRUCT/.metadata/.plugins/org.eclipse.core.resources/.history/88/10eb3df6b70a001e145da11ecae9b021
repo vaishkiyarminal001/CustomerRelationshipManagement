@@ -1,0 +1,42 @@
+package com.masai.dao;
+
+import com.masai.entity.CSR;
+import java.sql.*;
+
+public class CSRDaoImpl implements CSRDao{
+	
+	@Override
+	public void saveCSR(CSR csr) {
+		
+		Connection connection = getConnection();
+		
+		try {
+			String sql = "INSERT INTO csr_table (id, name, email) VALUES(?, ?, ?)";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			
+			statement.setString(1,  csr.getId());
+			statement.setString(2,  csr.getName());
+			statement.setString(3,  csr.getEmail());
+			
+		}
+		
+	}
+	
+	@Override
+	public void updateCSR(CSR csr) {
+		
+	}
+	
+	@Override
+	public void deleteCSR(String csrId) {
+		
+	}
+	
+	@Override
+	public CSR getCSRById(String csrId) {
+		
+		return null;
+		
+	}
+
+}
