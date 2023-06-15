@@ -1,0 +1,98 @@
+package com.masai.ui;
+
+import java.util.Scanner;
+
+public class App {
+    public static void main(String[] args) {
+        UserInterface ui = new UserInterface();
+        ui.showMenu();
+    }
+}
+
+class UserInterface {
+    private Scanner scanner;
+
+    public UserInterface() {
+        scanner = new Scanner(System.in);
+    }
+
+    public void showMenu() {
+    	 System.out.println("Welcome to the Application!");
+         System.out.println("1. Register");
+         System.out.println("2. Login");
+         System.out.println("3. Provide Feedback");
+         System.out.println("4. Check Status");
+         System.out.println("5. Raise Issue");
+         System.out.println("0. Exit");
+         System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (choice) {
+            case 0:
+                System.out.println("Exiting...");
+                break;
+            case 1:
+                register();
+                break;
+            case 2:
+                login();
+                break;
+            case 3:
+                provideFeedback();
+                break;
+            case 4:
+                checkStatus();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                showMenu();
+                break;
+        }
+    }
+
+    private void register() {
+        System.out.println("-- Registration --");
+        System.out.print("Enter your name: ");
+        scanner.nextLine();
+       
+        System.out.println("Registration successful!");
+        showMenu();
+    }
+
+    private void login() {
+        System.out.println("-- Login --");
+        System.out.print("Enter your username: ");
+        scanner.nextLine();
+        System.out.print("Enter your password: ");
+        scanner.nextLine();
+        
+        System.out.println("Login successful!");
+        showMenu();
+    }
+
+    private void provideFeedback() {
+        System.out.println("-- Provide Feedback --");
+        System.out.print("Enter your feedback: ");
+        scanner.nextLine();
+        
+        System.out.println("Thank you for your feedback!");
+        showMenu();
+    }
+
+    private void checkStatus() {
+        System.out.println("-- Check Status --");
+        
+        System.out.println("Your status is: [status]");
+        showMenu();
+    }
+    
+    private void raiseIssue() {
+        System.out.println("-- Raise Issue --");
+        System.out.print("Enter the issue description: ");
+        String issueDescription = scanner.nextLine();
+        // Additional issue handling logic here
+        System.out.println("Issue raised successfully!");
+        showMenu();
+    }
+}

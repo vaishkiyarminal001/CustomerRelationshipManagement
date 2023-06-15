@@ -1,7 +1,6 @@
 package com.masai.dao;
 
 import com.masai.entity.*;
-import com.masai.utility.*;
 import jakarta.persistence.*;
 import java.util.*;
 
@@ -10,7 +9,9 @@ import org.hibernate.internal.build.AllowSysOut;
 public class CustomerDaoImpl implements CustomerDao{
 	
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("CRM");
-	
+	public CustomerDaoImpl(EntityManager entityManager) {
+	}
+
 	@Override
 	public void saveCustomer(Customer customer) {
 	
