@@ -2,49 +2,34 @@ package com.masai.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-
-import jakarta.persistence.*;
-
 @Entity
-@Table(name = "customer")
-
+@Table(name = "Customer")
 public class Customer {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@Column(name = "id")
+	private String id;
 	
-	
-	@Column(name = "name", nullable = false)
+	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "username", unique = true, nullable = false)
-	private String username;
-	
-	@Column(name = "password", nullable = false)
-	private String password;
-	
-	@Column(name = "date_of_birth", nullable = false)
-	private LocalDate dateOfBirth;
-	
-	
+	@Column(name = "email")
+	private String email;
+
 	public Customer() {
-		
 	}
 
-	public Customer(String name, String username, String password, LocalDate dateOfBirth) {
-		
+	public Customer(String id, String name, String email) {
+		this.id = id;
 		this.name = name;
-		this.username = username;
-		this.password = password;
-		this.dateOfBirth = dateOfBirth;
+		this.email = email;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -56,27 +41,11 @@ public class Customer {
 		this.name = name;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(LocalDate dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

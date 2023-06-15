@@ -1,0 +1,26 @@
+package com.masai.CRM;
+
+import jakarta.persistence.*;
+import com.masai.dao.*;
+import com.masai.entity.*;
+
+public class Test {
+
+    public static void main(String[] args) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("CRM");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+            CustomerDao customerDao = new CustomerDaoImpl(entityManager);
+            Customer customer = customerDao.getCustomerById("123");
+            if (customer != null) {
+                System.out.println("Customer found: " + customer.getName());
+            } else {
+                System.out.println("Customer not found.");
+            }
+        } finally {
+            entityManager.close();
+            entityManagerFactory.close();
+        }
+    }
+}

@@ -21,16 +21,16 @@ public abstract class CustomerServicesImpl implements CustomerService {
         entityManager.persist(issue);
     }
 
-//    @Override
-//    public void viewIssueStatus(String issueId) {
-//    	 Issue issue = entityManager.find(Issue.class, issueId);
-//         if (issue != null) {
-//             System.out.println("Issue ID: " + issue.getId());
-//             System.out.println("Issue Status: " + issue.getStatus());
-//         } else {
-//             System.out.println("Issue not found with ID: " + issueId);
-//         }
-//    }
+    @Override
+    public void viewIssueStatus(String issueId) {
+    	 Issue issue = entityManager.find(Issue.class, issueId);
+         if (issue != null) {
+             System.out.println("Issue ID: " + issue.getId());
+             System.out.println("Issue Status: " + issue.getStatus());
+         } else {
+             System.out.println("Issue not found with ID: " + issueId);
+         }
+    }
 
     @Override
     @Transactional

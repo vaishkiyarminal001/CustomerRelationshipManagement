@@ -1,0 +1,56 @@
+package com.masai.ui;
+
+import com.masai.dao.*;
+import com.masai.entity.*;
+
+import jakarta.persistence.*;
+
+public class App {
+	public static void main(String[] args) {
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("CRM");
+		
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		
+		try {
+	            
+	            CustomerDao customerDao = new CustomerDaoImpl(entityManager);
+	            Customer customer = customerDao.getCustomerById("123");
+	            if (customer != null) {
+	                System.out.println("Customer found: " + customer.getName());
+	            } else {
+	                System.out.println("Customer not found....");
+	            }
+
+	     
+	            Customer newCustomer = new Customer();
+	            newCustomer.setName("Minal Kumari");
+	            newCustomer.setEmail("minalKumari@gmail.com");
+	            
+	            customerDao.saveCustomer(newCustomer);
+	            System.out.println("New customer created with ID: " + newCustomer.getId());
+
+	           
+	            Customer existingCustomer = customerDao.getCustomerById("456");
+	            if (existingCustomer != null) {
+	                existingCustomer.setName("Updated Name");
+	              
+	                customerDao.updateCustomer(existingCustomer);
+	                System.out.println("Customer updated successfully.");
+	            } else {
+	                System.out.println("Customer not found.");
+	            }
+
+	           
+	            String customerIdToDelete = "789";
+	            customerDao.deleteCustomer(customerIdToDelete);
+	            System.out.println("Customer with ID " + customerIdToDelete + " deleted successfully.");
+
+			
+		}finally {
+			entityManager.close();
+			entityManagerFactory.close();
+		}
+	}
+
+}
