@@ -1,0 +1,11 @@
+//package com.masai.services;
+//
+//public class GetCustomerCredImpl implements GetCustomerCred{
+//	
+//	 @Override
+//	    public String getCustomerCredentials() {
+//	        // Implementation to get customer credentials
+//	        return null;
+//	    }
+//	
+//}
