@@ -1,0 +1,89 @@
+package com.masai.entity;
+
+import com.masai.enm.IssueStatus;
+
+import jakarta.persistence.*;
+
+//Issue class
+
+@Entity
+@Table(name = "Issue")
+public class Issue {
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+ private int id;
+
+ @ManyToOne
+ @JoinColumn(name = "customerId")
+ private Customer customer;
+
+ @Column(name = "description", nullable = false)
+ private String description;
+
+ @Enumerated(EnumType.STRING)
+ @Column(name = "status", nullable = false)
+ private IssueStatus status;
+
+ @Column(name = "feedback")
+ private String feedback;
+
+
+ public Issue() {
+ 	super();
+ }
+
+ public Issue(Customer customer, String description, IssueStatus status, String feedback) {
+     this.customer = customer;
+     this.description = description;
+     this.status = status;
+     this.feedback = feedback;
+ }
+
+ // Getters and Setters
+
+ public int getId() {
+     return id;
+ }
+
+ public void setId(int id) {
+     this.id = id;
+ }
+
+ public Customer getCustomer() {
+     return customer;
+ }
+
+ public void setCustomer(Customer customer) {
+     this.customer = customer;
+ }
+
+ public String getDescription() {
+     return description;
+ }
+
+ public void setDescription(String description) {
+     this.description = description;
+ }
+
+ public IssueStatus getStatus() {
+     return status;
+ }
+
+ public void setStatus(IssueStatus status) {
+     this.status = status;
+ }
+
+ public String getFeedback() {
+     return feedback;
+ }
+
+ public void setFeedback(String feedback) {
+     this.feedback = feedback;
+ }
+
+public void setCustomerId(int customerId) {
+	 this.customerId = customerId;
+	
+	
+}
+}

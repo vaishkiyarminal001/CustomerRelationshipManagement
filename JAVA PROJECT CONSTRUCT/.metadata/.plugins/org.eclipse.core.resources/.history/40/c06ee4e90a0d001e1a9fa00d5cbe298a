@@ -1,0 +1,183 @@
+package com.masai.ui;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class App {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/CRM";
+    private static final String DB_USERNAME = "root";
+    private static final String DB_PASSWORD = "root1234";
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            displayMenu();
+            int choice = getUserChoice();
+
+            if (choice == 0) {
+                System.out.println("Exiting...");
+                break;
+            } else if (choice == 1) {
+                register();
+            } else if (choice == 2) {
+                login();
+            } else if (choice == 3) {
+                getFeedback();
+            } else if (choice == 4) {
+                checkStatus();
+            } else if (choice == 5) {
+                getIssue();
+            } else if (choice == 6) {
+            	raiseIssue();
+            }else {
+                System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void checkStatus() {
+    	 String username = getUsername();
+
+    	    try (Connection connection = getConnection();
+    	         PreparedStatement statement = connection.prepareStatement("SELECT status FROM issues WHERE username = ?")) {
+    	        statement.setString(1, username);
+    	        ResultSet resultSet = statement.executeQuery();
+    	        if (resultSet.next()) {
+    	            String status = resultSet.getString("status");
+    	            displayStatus(status);
+    	        } else {
+    	            System.out.println("No status found for the given username.");
+    	        }
+    	    } catch (SQLException e) {
+    	        System.out.println("An error occurred while checking status: " + e.getMessage());
+    	    }
+		
+	}
+    
+    private static void raiseIssue() {
+        String username = getUsername();
+        String issueDescription = getIssue();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO issues (username, issue_description, status) VALUES (?, ?, 'Open')")) {
+            statement.setString(1, username);
+            statement.setString(2, issueDescription);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Issue raised successfully!");
+            } else {
+                System.out.println("Failed to raise the issue. Please try again.");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while raising the issue: " + e.getMessage());
+        }
+    }
+
+	private static void displayStatus(String status) {
+		 System.out.println("Status: " + status);
+	}
+		
+	
+
+	private static void displayMenu() {
+        System.out.println("Welcome to the Application!");
+        System.out.println("1. Register");
+        System.out.println("2. Login");
+        System.out.println("3. Provide Feedback");
+        System.out.println("4. Check Status");
+        System.out.println("5. Raise Issue");
+        System.out.println("0. Exit");
+    }
+
+    private static int getUserChoice() {
+        while (true) {
+            System.out.print("Enter your choice: ");
+            String input = scanner.nextLine();
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid choice. Please enter a number.");
+            }
+        }
+    }
+
+    private static String getUsername() {
+        System.out.print("Enter your username: ");
+        return scanner.nextLine();
+    }
+
+    private static String getPassword() {
+        System.out.print("Enter your password: ");
+        return scanner.nextLine();
+    }
+
+    private static String getFeedback() {
+        System.out.print("Enter your feedback: ");
+        return scanner.nextLine();
+    }
+
+    private static String getIssue() {
+        System.out.print("Enter the issue you want to raise: ");
+        return scanner.nextLine();
+    }
+
+    private static void register() {
+        String username = getUsername();
+        String password = getPassword();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)")) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Registration successful!");
+            } else {
+                System.out.println("Registration failed. Please try again.");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while registering: " + e.getMessage());
+        }
+    }
+
+    
+
+	private static void login() {
+        String username = getUsername();
+        String password = getPassword();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                System.out.println("Login successful!");
+                
+            } else {
+                System.out.println("Invalid username or password. Please try again.");
+            }
+        } catch (SQLException e) {
+        }
+        }
+       
+        private static Connection getConnection() throws SQLException {
+       	 Connection connection = null;
+       	    try {
+       	       
+       	        Class.forName("com.mysql.cj.jdbc.Driver");
+       	        
+       	        
+       	        connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+       	    } catch (ClassNotFoundException e) {
+       	        System.out.println("Failed to load the MySQL JDBC driver.");
+       	        e.printStackTrace();
+       	    }
+       	    return connection;
+   	}
+        }

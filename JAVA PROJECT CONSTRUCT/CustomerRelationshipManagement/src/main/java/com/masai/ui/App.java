@@ -32,6 +32,8 @@ public class App {
                 checkStatus();
             } else if (choice == 5) {
                 getIssue();
+            } else if (choice == 6) {
+            	raiseIssue();
             } else {
                 System.out.println("Invalid choice. Please try again.");
             }
@@ -39,31 +41,52 @@ public class App {
     }
 
     private static void checkStatus() {
-    	 String username = getUsername();
+        String customerId = getCustomerId();
 
-    	    try (Connection connection = getConnection();
-    	         PreparedStatement statement = connection.prepareStatement("SELECT status FROM issues WHERE username = ?")) {
-    	        statement.setString(1, username);
-    	        ResultSet resultSet = statement.executeQuery();
-    	        if (resultSet.next()) {
-    	            String status = resultSet.getString("status");
-    	            displayStatus(status);
-    	        } else {
-    	            System.out.println("No status found for the given username.");
-    	        }
-    	    } catch (SQLException e) {
-    	        System.out.println("An error occurred while checking status: " + e.getMessage());
-    	    }
-		
-	}
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT status FROM Issue WHERE customerId = ?")) {
+            statement.setString(1, customerId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String status = resultSet.getString("status");
+                displayStatus(status);
+            } else {
+                System.out.println("No status found for the given customer ID.");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while checking status: " + e.getMessage());
+        }
+    }
 
-	private static void displayStatus(String status) {
-		 System.out.println("Status: " + status);
-	}
-		
-	
+    private static String getCustomerId() {
+        System.out.print("Enter your customer ID: ");
+        return scanner.nextLine();
+    }
 
-	private static void displayMenu() {
+    private static void raiseIssue() {
+        String username = getUsername();
+        String issueDescription = getIssue();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO Issue (customerId, description, feedback, status) VALUES (?, ?, NULL, 'Open')")) {
+            statement.setString(1, username);
+            statement.setString(2, issueDescription);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Issue raised successfully!");
+            } else {
+                System.out.println("Failed to raise the issue. Please try again.");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while raising the issue: " + e.getMessage());
+        }
+    }
+
+    private static void displayStatus(String status) {
+        System.out.println("Status: " + status);
+    }
+
+    private static void displayMenu() {
         System.out.println("Welcome to the Application!");
         System.out.println("1. Register");
         System.out.println("2. Login");
@@ -96,8 +119,42 @@ public class App {
     }
 
     private static String getFeedback() {
-        System.out.print("Enter your feedback: ");
+        String username = getUsername();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM Issue WHERE username = ? AND status = 'Resolved' AND feedback IS NULL")) {
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int issueId = resultSet.getInt("id");
+                String issueDescription = resultSet.getString("issue_description");
+                System.out.println("Issue ID: " + issueId);
+                System.out.println("Issue Description: " + issueDescription);
+                System.out.print("Enter your feedback: ");
+                String feedback = scanner.nextLine();
+                updateIssueFeedback(issueId, feedback);
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while retrieving issue: " + e.getMessage());
+        }
+
         return scanner.nextLine();
+    }
+
+    private static void updateIssueFeedback(int issueId, String feedback) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement("UPDATE Issue SET feedback = ? WHERE id = ?")) {
+            statement.setString(1, feedback);
+            statement.setInt(2, issueId);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Feedback added successfully!");
+            } else {
+                System.out.println("Failed to add feedback. Please try again.");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while updating feedback: " + e.getMessage());
+        }
     }
 
     private static String getIssue() {
@@ -124,9 +181,7 @@ public class App {
         }
     }
 
-    
-
-	private static void login() {
+    private static void login() {
         String username = getUsername();
         String password = getPassword();
 
@@ -137,26 +192,23 @@ public class App {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 System.out.println("Login successful!");
-                // Perform further operations or navigate to the CRM system
             } else {
                 System.out.println("Invalid username or password. Please try again.");
             }
         } catch (SQLException e) {
+            System.out.println("An error occurred while logging in: " + e.getMessage());
         }
+    }
+
+    private static Connection getConnection() throws SQLException {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Failed to load the MySQL JDBC driver.");
+            e.printStackTrace();
         }
-       
-        private static Connection getConnection() throws SQLException {
-       	 Connection connection = null;
-       	    try {
-       	        // Load the MySQL JDBC driver
-       	        Class.forName("com.mysql.cj.jdbc.Driver");
-       	        
-       	        // Establish the database connection
-       	        connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-       	    } catch (ClassNotFoundException e) {
-       	        System.out.println("Failed to load the MySQL JDBC driver.");
-       	        e.printStackTrace();
-       	    }
-       	    return connection;
-   	}
-        }
+        return connection;
+    }
+}
