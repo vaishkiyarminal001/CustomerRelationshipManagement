@@ -1,10 +1,8 @@
 # indigo-quarter-8668
 
-![Example Image](CRM.png)
 
 
-
-**##CRM Application**
+**CRM Application**
 
 The CRM (Customer Relationship Management) application is a Java-based system that allows users to perform various operations related to customer management and issue tracking. It provides functionality for user registration, login, providing feedback, checking issue status, and raising issues. The application uses a MySQL database to store customer information and track their issues.
 
