@@ -1,54 +1,36 @@
-# indigo-quarter-8668
+**Customer Relationship Management (CRM) System 📊👥**
 
+<img align="right" alt="Coding" width="100%" src="/CRM.jpg">
 
+The Console-based Customer Relationship Management (CRM) System stands as an innovative software solution meticulously crafted to elevate customer interactions, streamline issue resolution, and ultimately cultivate heightened customer satisfaction. This purpose-driven system is engineered to furnish businesses with robust tools that orchestrate the seamless management of customer concerns and facilitate proficient customer support. With Java as the programming bedrock, MySQL as the stalwart database management system, and the versatile Hibernate framework orchestrating Object-Relational Mapping (ORM), this CRM system takes shape as an embodiment of technological finesse.
 
-**CRM Application**
+***_User Profiles 🧑‍💼👤_***
 
-The CRM (Customer Relationship Management) application is a Java-based system that allows users to perform various operations related to customer management and issue tracking. It provides functionality for user registration, login, providing feedback, checking issue status, and raising issues. The application uses a MySQL database to store customer information and track their issues.
+1. Customer Support Representative (CSR)
+The esteemed Customer Support Representatives form the lynchpin of this CRM system. Their pivotal roles encompass:
 
-__Features__
-User Registration: Users can register by providing a username and password. The registration data is stored in the MySQL database.
+📝 Registration: Creating a CSR account by furnishing requisite details, ensuring accurate identification within the system.
+🔑 Authentication: Seamless login using the verified credentials, a gateway to the CSR's dedicated interface.
+👁️ Issue Management: Swiftly navigating and managing customer-escalated issues, fostering a harmonious support journey.
+💌 Issue Resolution: Crafting informed responses to customer issues, offering tailored assistance and relevant insights.
+✅ Issue Closure: Effectively closing resolved issues, marking their successful culmination within the system.
+📈 Feedback Insights: Accessing customer feedback post-issue resolution, gaining valuable insights for continuous enhancement.
+🚪 Logout: Disengaging from the CSR account with a simple logout, preserving security and account integrity.
 
-Login: Registered users can log in using their username and password. The application verifies the credentials against the database.
+2. Customer
+Empowering customers to be active stakeholders in their service experiences, the customer-centric functionality encompasses:
 
-Provide Feedback: Customers can provide feedback on resolved issues. They can view a list of their resolved issues and enter their feedback for each issue.
-
-Check Issue Status: Customers can check the status of their raised issues. The application retrieves the status from the database based on the customer ID.
-
-Raise Issue: Customers can raise new issues by providing a description. The application inserts the issue into the database with an initial status of "Open."
+📝 Registration: Enrolling as a customer, divulging necessary particulars for distinct user recognition.
+🔑 Access Control: Securely logging into the personalized account, unlocking avenues to expedient issue addressing.
+🚩 Issue Raising: Initiating the issue resolution process by furnishing detailed problem descriptions.
+📊 Issue Tracking: Monitoring issue status in real-time, distinguishing between open and closed matters.
+🗣️ Feedback Loop: Contributing feedback upon issue resolution, contributing to iterative service enhancement.
+🚪 Logout: Concluding the session with a logout, cementing privacy and personalized experience.
 
 __Database Schema__
-The application uses the following database schema:
-
-Table: users
-
-Columns: id (auto-generated), username, password
-Table: Customer
-
-Columns: id, name, email
-Table: Issue
-
-Columns: id (auto-generated), customerId, description, status, feedback
-Table: csr
-
-Columns: id (auto-generated), name, email
-The Customer and CSR entities are mapped to their respective database tables using JPA (Java Persistence API) annotations.
-
-__Dependencies__
-
-The application requires the following dependencies:
-
-Java MySQL Connector (JDBC driver) for connecting to the MySQL database.
-Jakarta Persistence API (JPA) for object-relational mapping.
+<img align="right" alt="Coding" width="100%" src="/Schema.png">
 
 
-**How to Use**
-Set up a MySQL database named "CRM" on your local machine. Update the DB_URL, DB_USERNAME, and DB_PASSWORD constants in the App class with your MySQL database connection details.
+Think of the CRM system as a strong foundation, like the base of a building. It works together with Java, MySQL, and Hibernate, which are like skilled musicians in a band. They work harmoniously to create a smooth and organized experience for both customer support reps and customers. Just like a well-practiced symphony, this collaboration makes interactions and issue resolutions feel effortless and enjoyable. 🏢🎶🌟
 
-Compile and run the App class to start the CRM application.
-
-The application will display a menu with options. Enter the corresponding number to perform the desired operation.
-
-Follow the prompts to register, login, provide feedback, check issue status, or raise an issue.
-
-Use the application as needed and exit by selecting option 0 from the menu.
+Designed and developed with ❤️ by Minal Kumari

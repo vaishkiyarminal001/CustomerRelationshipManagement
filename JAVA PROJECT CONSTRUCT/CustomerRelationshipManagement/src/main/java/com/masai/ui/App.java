@@ -6,10 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
+import org.mindrot.jbcrypt.BCrypt;
 
 import com.masai.dao.CSRDaoImpl;
-import com.masai.dao.CustomerDaoImpl;
-import com.masai.dao.GetCustomerCredsDaoImpl;
 import com.masai.enm.Category;
 import com.masai.enm.Feedback;
 import com.masai.enm.IssueStatus;
@@ -29,6 +28,7 @@ import jakarta.persistence.Query;
 
 public class App {
     static EntityManagerFactory emf = HibernateUtil.getEntityManagerFactory();
+    
     
     private static final String DB_URL = "jdbc:mysql://localhost:3306/crm";
     private static final String DB_USERNAME = "root";
@@ -50,9 +50,9 @@ public class App {
             } else if (choice == 2) {
                 login(sc);
             } else if (choice == 3) {
-                login(sc);
+            	customerRegistration(sc);
             } else if (choice == 4) {
-                login(sc);
+            	customerLogin(sc);
             } else if (choice == 5) {
                 getFeedback();
             } else if (choice == 6) {
@@ -193,54 +193,57 @@ public class App {
 
     }
     
-    // customer 
+    // customer register
     
-     public void customerRegistration(Scanner sc) {
+     public static void customerRegistration(Scanner sc) {
 		
-		System.out.println("Enter User_Name");
-		String userName = sc.next();
-		System.out.println("Enter PassWord");
-		String passWord = sc.next();
+		System.out.println("Enter Username");
+		String userName = sc.nextLine();
+		System.out.println("Enter Password");
+		String passWord = sc.nextLine();
 		System.out.println("Enter Name");
-		String name = sc.next();
+		String name = sc.nextLine();
 		System.out.println("Enter Email");
-		String email = sc.next();
+		String email = sc.nextLine();
 		System.out.println("Enter Address");
-		String address = sc.next();
+		String address = sc.nextLine();
 		
-		com.masai.entity.Customer cus = new com.masai.entity.Customer(userName, passWord, name, email, address , new HashSet<>() , new HashSet<>());
 		
+		Customer cus = new Customer(userName, passWord, name, email, address , new HashSet<>() , new HashSet<>());
+		String hashedPassword = BCrypt.hashpw(cus.getPassWord(), BCrypt.gensalt());
+		boolean checkpw = BCrypt.checkpw(passWord, hashedPassword);
+		System.out.println(checkpw);
 		Customerser cusSer = new CustomerImpl();
+	
 		
 		cusSer.addNewCustomer(cus);
 		
 	}
      
-     // customer login
 	
-    public  void customerLogin(Scanner sc) {
+     public static void customerLogin(Scanner sc) {
+    	    System.out.println("Enter Customer UseName ");
+    	    String userName = sc.next();
 
-		    System.out.println("Enter Customer UseName ");
-		    String userName = sc.next();
-		
-		    System.out.println("Enter Customer PassWord ");
-		    String passWord = sc.next();
-		    System.out.println();
-		    
-		    GetCustomerCred getCustomerCreds = new GetCustomerCredImpl();
-		
-		    List<Customer> customerUserPass = getCustomerCreds.getCustomerList();
-		
-		    customerUserPass.forEach( c -> {
-			    if(c.getUserName().equals(userName)&&c.getPassWord().equals(passWord)) {	
-				    System.out.println("Welcome Customer:- "+c.getName());
-				    com.masai.entity.LoggedCustomerId.loggedCustomerId = c.getId();
-				    System.out.println(com.masai.entity.LoggedCustomerId.loggedCustomerId);
-				    customerFieldsExc(sc);
-			      }
-		    });
-			
-	  }
+    	    System.out.println("Enter Customer PassWord ");
+    	    String passWord = sc.next();
+    	    System.out.println();
+
+    	    // Hash the provided password
+    	    String hashedPassword = BCrypt.hashpw(passWord, BCrypt.gensalt());
+
+    	    GetCustomerCred getCustomerCreds = new GetCustomerCredImpl();
+    	    Customer csr = getCustomerCreds.getCustomerCredentials(userName, hashedPassword);
+
+    	    if (csr != null && csr.getUserName().equals(userName) && BCrypt.checkpw(passWord, csr.getPassWord())) {
+    	        System.out.println("Welcome Customer:- " + csr.getName());
+    	        System.out.println();
+    	        customerFieldsExc(sc);
+    	    } else {
+    	        System.out.println("Invalid username or password");
+    	    }
+    	}
+
     
     
 

@@ -1,6 +1,7 @@
 package com.masai.dao;
 
 import com.masai.enm.Feedback;
+import com.masai.enm.IssueStatus;
 import com.masai.entity.*;
 import jakarta.persistence.*;
 import java.util.*;
@@ -10,8 +11,6 @@ import org.hibernate.internal.build.AllowSysOut;
 public class CustomerDaoImpl implements CustomerDao{
 	
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("CRM");
-	public CustomerDaoImpl(EntityManager entityManager) {
-	}
 
 	@Override
 	public void saveCustomer(Customer customer) {
@@ -109,19 +108,91 @@ public class CustomerDaoImpl implements CustomerDao{
 
 	@Override
 	public void createIssue(Issue issue) {
-		// TODO Auto-generated method stub
+		EntityManager em = null;
+		EntityTransaction et = null;
+		
+        try {
+			
+			em = emf.createEntityManager();
+			et = em.getTransaction();
+
+			et.begin();
+			em.persist(issue);
+			et.commit();
+			
+		} catch (Exception e) {
+			et.rollback();
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}finally {
+			em.close();	
+		}
 		
 	}
 
 	@Override
 	public List<Issue> viewAllIssuesAndGiveFeed(int id) {
-		// TODO Auto-generated method stub
-		return null;
+List<Issue> issueList = null;
+		
+		try{
+			
+			EntityManager em = emf.createEntityManager();
+			
+            String getIssues = "SELECT c FROM Issue c WHERE c.customer.id=:id";
+			
+			Query createQuery = em.createQuery(getIssues);
+			
+			createQuery.setParameter("id", id);
+			
+			 issueList = (List<Issue>) createQuery.getResultList();
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return issueList;
+
 	}
 
 	@Override
 	public void giveFeedBackToIssues(int id, Feedback feed) {
-		// TODO Auto-generated method stub
+		EntityManager em = null;
+		EntityTransaction et = null;
+		int executeUpdate = 0 ;
+         try {
+			
+			em = emf.createEntityManager();
+			et = em.getTransaction();
+			
+			String que = "UPDATE Issue i SET feedback=:feed WHERE id=:id AND status=:stat";
+
+			Query query = em.createQuery(que);
+				
+			query.setParameter("feed", feed);
+			query.setParameter("id", id);
+			query.setParameter("stat", IssueStatus.CLOSED);
+			
+			et.begin();
+			executeUpdate = query.executeUpdate();
+			et.commit();
+			
+		} catch (Exception e) {
+			
+			et.rollback();
+			
+			System.out.println(e.getMessage());
+			
+		}finally {
+			
+			em.close();
+			
+		}
+		
+         if(executeUpdate > 0 ) {
+        	 System.out.println("Feedback Successfully imparted");
+         }else {
+        	 System.out.println("Feedback Couldn't imparted");
+         }
+         
 		
 	}
 
