@@ -215,6 +215,8 @@ public class App {
 		cusSer.addNewCustomer(cus);
 		
 	}
+     
+     // customer login
 	
     public  void customerLogin(Scanner sc) {
 
@@ -239,6 +241,8 @@ public class App {
 		    });
 			
 	  }
+    
+    
 
       public static void customerFieldsExc(Scanner sc) {
 	
