@@ -1,25 +1,22 @@
 package com.masai.services;
 
-
-
 import java.util.List;
 
-import com.masai.dao.CustomerDao;
-import com.masai.dao.CustomerDaoImpl;
-import com.masai.enm.Feedback;
 import com.masai.entity.Customer;
 import com.masai.entity.Issue;
+import com.masai.dao.*;
+import com.masai.enm.Feedback;
 
 
 
-public abstract class CustomerServicesImpl implements Customerser {
-
+public class CustomerImpl implements Customerser{
+	
 	@Override
 	public void addNewCustomer(Customer cus) {
 		
 		CustomerDao cusDao = new CustomerDaoImpl(null);
 		
-		cusDao.addNewCustomer(cus);
+		cusDao.saveCustomer(cus);
 		
 	}
 
@@ -46,6 +43,5 @@ public abstract class CustomerServicesImpl implements Customerser {
 		CustomerDao cusDao = new CustomerDaoImpl(null);
 		cusDao.giveFeedBackToIssues(id, feed);
 	}
-    
-    
+
 }
