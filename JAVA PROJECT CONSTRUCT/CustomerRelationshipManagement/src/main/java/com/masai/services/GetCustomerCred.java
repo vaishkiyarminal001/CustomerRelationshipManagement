@@ -6,7 +6,7 @@ import com.masai.entity.Customer;
 
 public interface GetCustomerCred {
 
-	 String getCustomerCredentials();
+	public  Customer getCustomerCredentials(String username , String password);
 
 	List<Customer> getCustomerList();
 }

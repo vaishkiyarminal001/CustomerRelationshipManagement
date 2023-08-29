@@ -14,7 +14,7 @@ public class CustomerImpl implements Customerser{
 	@Override
 	public void addNewCustomer(Customer cus) {
 		
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		
 		cusDao.saveCustomer(cus);
 		
@@ -24,7 +24,7 @@ public class CustomerImpl implements Customerser{
 	public void createIssue(Issue issue) {
 		
 
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		
 		cusDao.createIssue(issue);
 	}
@@ -32,7 +32,7 @@ public class CustomerImpl implements Customerser{
 	@Override
 	public List<Issue> viewAllIssuesAndGiveFeed(int id) {
 	
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		List<Issue> issueList = cusDao.viewAllIssuesAndGiveFeed(id);
 		return issueList;
 	}
@@ -40,7 +40,7 @@ public class CustomerImpl implements Customerser{
 	@Override
 	public void giveFeedBackToIssues(int id, Feedback feed) {
 		
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		cusDao.giveFeedBackToIssues(id, feed);
 	}
 

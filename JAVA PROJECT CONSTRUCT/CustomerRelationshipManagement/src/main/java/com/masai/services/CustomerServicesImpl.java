@@ -17,7 +17,7 @@ public abstract class CustomerServicesImpl implements Customerser {
 	@Override
 	public void addNewCustomer(Customer cus) {
 		
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		
 		cusDao.addNewCustomer(cus);
 		
@@ -27,7 +27,7 @@ public abstract class CustomerServicesImpl implements Customerser {
 	public void createIssue(Issue issue) {
 		
 
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		
 		cusDao.createIssue(issue);
 	}
@@ -35,7 +35,7 @@ public abstract class CustomerServicesImpl implements Customerser {
 	@Override
 	public List<Issue> viewAllIssuesAndGiveFeed(int id) {
 	
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		List<Issue> issueList = cusDao.viewAllIssuesAndGiveFeed(id);
 		return issueList;
 	}
@@ -43,7 +43,7 @@ public abstract class CustomerServicesImpl implements Customerser {
 	@Override
 	public void giveFeedBackToIssues(int id, Feedback feed) {
 		
-		CustomerDao cusDao = new CustomerDaoImpl(null);
+		CustomerDao cusDao = new CustomerDaoImpl();
 		cusDao.giveFeedBackToIssues(id, feed);
 	}
     
