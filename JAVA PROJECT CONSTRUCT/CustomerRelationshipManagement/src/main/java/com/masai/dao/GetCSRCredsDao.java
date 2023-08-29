@@ -4,6 +4,6 @@ import com.masai.entity.*;
 import java.util.Optional;
 
 public interface GetCSRCredsDao {
-	 Optional<AdminCreds> getCSRCredentials();
+//	 Optional<AdminCreds> getCSRCredentials();
 
 }

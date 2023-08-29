@@ -1,5 +1,6 @@
 package com.masai.dao;
 
+import com.masai.enm.Feedback;
 import com.masai.entity.*;
 import jakarta.persistence.*;
 import java.util.*;
@@ -104,6 +105,30 @@ public class CustomerDaoImpl implements CustomerDao{
 			em.close();
 		}
 		return null;
+	}
+
+	@Override
+	public void createIssue(Issue issue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Issue> viewAllIssuesAndGiveFeed(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void giveFeedBackToIssues(int id, Feedback feed) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addNewCustomer(Customer cus) {
+		// TODO Auto-generated method stub
+		
 	}
 
 		
