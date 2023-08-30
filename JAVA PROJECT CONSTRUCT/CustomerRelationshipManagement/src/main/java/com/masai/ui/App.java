@@ -142,7 +142,7 @@ public class App {
         System.out.println("Enter email");
         String email = sc.next();
         
-        System.out.println("Enter name");
+        System.out.println("Enter address");
         String address = sc.next();
         
         CSRDaoImpl csrDao = new CSRDaoImpl();
@@ -229,7 +229,7 @@ public class App {
     	    String passWord = sc.next();
     	    System.out.println();
 
-    	    // Hash the provided password
+    	   
     	    String hashedPassword = BCrypt.hashpw(passWord, BCrypt.gensalt());
 
     	    GetCustomerCred getCustomerCreds = new GetCustomerCredImpl();
